@@ -1,0 +1,208 @@
+/* ========================================================= */
+
+
+/* COMPREHENSIVE RESPONSIVE BREAKPOINTS (ALL SCREEN TYPES)  */
+
+
+/* ========================================================= */
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(2px);
+    z-index: 85;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+
+/* 1. Large Laptops / Desktops (max-width: 1200px) */
+
+@media screen and (max-width: 1200px) {
+    .dashboard-split-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+    }
+}
+
+
+/* 2. Tablets & Small Laptops (max-width: 992px) */
+
+@media screen and (max-width: 992px) {
+    .uet-sidebar {
+        transform: translateX(-100%) !important;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.25);
+    }
+    .uet-sidebar.mobile-open {
+        transform: translateX(0) !important;
+    }
+    .uet-content-wrapper {
+        margin-left: 0 !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+    }
+    .btn-sidebar-toggle {
+        display: inline-flex !important;
+    }
+    .landing-hero-container {
+        padding: 50px 20px !important;
+    }
+    .hero-title {
+        font-size: 2.2rem !important;
+    }
+    .landing-cards-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important;
+    }
+    .control-panel {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+    .panel-actions {
+        width: 100% !important;
+        justify-content: flex-start !important;
+        flex-wrap: wrap !important;
+    }
+}
+
+
+/* 3. Mobile Devices (max-width: 768px) */
+
+@media screen and (max-width: 768px) {
+    .landing-nav {
+        padding: 14px 16px !important;
+    }
+    .landing-brand-text h2 {
+        font-size: 1rem !important;
+    }
+    .landing-hero-container {
+        padding: 40px 14px !important;
+    }
+    .hero-title {
+        font-size: 1.75rem !important;
+    }
+    .hero-subtitle {
+        font-size: 0.95rem !important;
+    }
+    .uet-header {
+        padding: 0 14px !important;
+    }
+    .header-search {
+        width: 160px !important;
+    }
+    .header-title {
+        font-size: 1rem !important;
+    }
+    .uet-main-body {
+        padding: 14px !important;
+    }
+    .stat-cards-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .form-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .filter-group {
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+    .filter-item {
+        width: 100% !important;
+    }
+    .filter-item select {
+        width: 100% !important;
+    }
+    .panel-actions {
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+    .panel-actions .btn {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+    .card-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+    }
+    .card-header .btn {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+    .modal-content {
+        max-width: 95vw !important;
+        max-height: calc(100vh - 20px) !important;
+    }
+    .modal-body {
+        padding: 14px !important;
+    }
+    .dropzone {
+        padding: 28px 14px !important;
+    }
+    .demo-buttons-flex {
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+    .demo-login-btn {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+}
+
+
+/* 4. Extra Small Mobile Screens (max-width: 480px) */
+
+@media screen and (max-width: 480px) {
+    .landing-brand-text {
+        display: none !important;
+    }
+    .hero-pill {
+        font-size: 0.75rem !important;
+    }
+    .hero-title {
+        font-size: 1.45rem !important;
+    }
+    .header-search {
+        display: none !important;
+    }
+    .user-badge {
+        font-size: 0.8rem !important;
+    }
+    .dept-tree-children {
+        padding-left: 12px !important;
+    }
+    .room-tree-item {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 6px !important;
+    }
+    .room-specs {
+        flex-wrap: wrap !important;
+    }
+}
+
+
+/* ============================================================================
+   CAMPUS RESOURCE UTILIZATION — SUB-TAB SEGMENTED NAVIGATION (Phase 1) — Responsive
+   ============================================================================ */
+
+@media screen and (max-width: 768px) {
+    .dash-subtabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+    .dash-subtab span {
+        display: none;
+    }
+    .dash-subtab {
+        padding: 10px 14px;
+    }
+}

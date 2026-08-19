@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch UET KSK Timetable System (F5)",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/server.js",
+      "restart": true,
+      "console": "integratedTerminal",
+      "serverReadyAction": {
+        "pattern": "Local URL: (http://localhost:[0-9]+)",
+        "action": "openExternally",
+        "uriFormat": "%s"
+      }
+    }
+  ]
+}

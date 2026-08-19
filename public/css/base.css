@@ -1,0 +1,42 @@
+/* UET KSK University Timetable Management System - Core Styles */
+
+:root {
+    --uet-green: #7c8c72;
+    --uet-green-dark: #5f6e57;
+    --uet-green-light: #97a68d;
+    --uet-gold: #ffc107;
+    --uet-accent: #8a9a82;
+    --bg-main: #faf9f7;
+    --bg-card: #ffffff;
+    --bg-sidebar: #fdfcfa;
+    --text-dark: #2d2d2a;
+    --text-muted: #8a8a85;
+    --text-light: #faf9f7;
+    --border-color: #ece9e3;
+    --border-radius: 18px;
+    --shadow-sm: 0 2px 8px rgba(45, 45, 42, 0.05);
+    --shadow-md: 0 6px 16px rgba(45, 45, 42, 0.07);
+    --shadow-lg: 0 16px 32px rgba(45, 45, 42, 0.12);
+    --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-heading: 'Outfit', 'Inter', system-ui, sans-serif;
+    --sidebar-collapsed: 76px;
+    --sidebar-expanded: 250px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    background-color: var(--bg-main);
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-main);
+    color: var(--text-dark);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}

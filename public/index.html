@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UET KSK Campus Resource Utilization & Timetable Portal</title>
+    <meta name="description" content="Official UET KSK Kala Shah Kaku Campus Centralized Multi-Department Timetable Management Portal & Resource Utilization System.">
+
+    <!-- Fonts & FontAwesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- SheetJS CDN for Client-Side Excel Drag & Drop Parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <!-- Chart.js CDN for Graphical Statistics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+    <!-- Custom Styles (split into modular files - Phase 1) -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/landing.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/timetable.css">
+    <link rel="stylesheet" href="css/modals-forms.css">
+    <link rel="stylesheet" href="css/dashboard-analytics.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/print.css">
+    <link rel="stylesheet" href="css/dept-combo.css">
+    <link rel="stylesheet" href="css/themes.css">
+</head>
+
+<body>
+
+    <script src="js/theme.js"></script>
+
+    <!-- PUBLIC EXECUTIVE LANDING PAGE (Appears when NO user is logged in) -->
+    <section id="viewLanding" class="landing-page-wrapper" style="display: block;">
+        <!-- Top Sticky Glass Nav -->
+        <nav class="landing-nav">
+            <div class="landing-brand">
+                <div class="landing-brand-logo">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div class="landing-brand-text">
+                    <h2>UET KSK CAMPUS</h2>
+                    <span>Resource Utilization & Timetable</span>
+                </div>
+            </div>
+            <div class="theme-toggle" id="themeToggleLanding">
+                <button type="button" class="theme-toggle-btn" data-theme-option="sage" onclick="setTheme('sage')">
+                    <span class="theme-toggle-dot dot-sage"></span> Sage
+                </button>
+                <button type="button" class="theme-toggle-btn" data-theme-option="indigo" onclick="setTheme('indigo')">
+                    <span class="theme-toggle-dot dot-indigo"></span> Indigo
+                </button>
+                <button type="button" class="theme-toggle-btn" data-theme-option="ocean" onclick="setTheme('ocean')">
+                    <span class="theme-toggle-dot dot-ocean"></span> Ocean
+                </button>
+            </div>
+            <button class="hero-cta-btn" style="padding: 10px 24px; font-size: 0.95rem;" onclick="openLoginModal()">
+        <i class="fa-solid fa-right-to-bracket"></i> Login to Portal
+      </button>
+        </nav>
+
+        <!-- Hero Section -->
+        <div class="landing-hero-container">
+            <div class="hero-pill">
+                <i class="fa-solid fa-shield-halved"></i> Official Kala Shah Kaku Campus Academic Portal
+            </div>
+            <h1 class="hero-title">Campus Resource Utilization <span>& Timetable System</span></h1>
+            <p class="hero-subtitle">Streamlined academic scheduling, graphical resource utilization analytics, real-time classroom allocation, and department management for UET KSK Campus.</p>
+
+            <button class="hero-cta-btn" onclick="openLoginModal()">
+        <i class="fa-solid fa-chart-pie"></i> Access Campus Resource Utilization
+      </button>
+        </div>
+
+        <!-- System Capability Cards -->
+        <div class="landing-cards-grid">
+            <div class="feature-card">
+                <div class="feature-icon-box icon-green"><i class="fa-solid fa-building-columns"></i></div>
+                <h3>Centralized Master Schedule</h3>
+                <p>Real-time centralized matrix with automated schedule collision detection across all university academic blocks.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-box icon-blue"><i class="fa-solid fa-door-closed"></i></div>
+                <h3>Smart Room Allocation</h3>
+                <p>Track lecture hall capacities, projector availability, and computer lab equipment (PCs) per department.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-box icon-purple"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3>Department Isolation Guard</h3>
+                <p>Protected role-based security. Department coordinators edit their own schedules while preserving cross-department visibility.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-box icon-orange"><i class="fa-solid fa-file-excel"></i></div>
+                <h3>Excel Drag & Drop Importer</h3>
+                <p>Import `.xlsx` timetable spreadsheets directly into room schedules with 1-click automatic preset data loader.
+                </p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- AUTHENTICATED DASHBOARD LAYOUT (Appears ONLY when logged in) -->
+    <div class="uet-layout" id="authenticatedLayout" style="display: none;">
+
+        <!-- Mobile Sidebar Backdrop Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebarMobile()"></div>
+
+        <!-- UET KSK Left Sidebar Navigation -->
+        <aside class="uet-sidebar no-print" id="uetSidebar">
+            <!-- Sidebar Brand Header -->
+            <div class="sidebar-brand">
+                <div class="uet-logo-wrap">
+                    <i class="fa-solid fa-graduation-cap uet-icon"></i>
+                </div>
+                <div class="uet-brand-info">
+                    <h2>UET KSK</h2>
+                    <span>Kala Shah Kaku Campus</span>
+                </div>
+            </div>
+
+            <!-- Navigation Menu Links -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active" id="navDashboard" onclick="switchMainView('viewDashboard', this)">
+                        <a href="javascript:void(0)"><i class="fa-solid fa-chart-line"></i> <span>Campus Resource
+                Utilization</span></a>
+                    </li>
+                    <li class="nav-item" id="navDepts" onclick="switchMainView('viewDeptsTree', this)">
+                        <a href="javascript:void(0)"><i class="fa-solid fa-building-columns"></i> <span>Departments</span></a>
+                    </li>
+                    <li class="nav-item" id="navTimetable" onclick="switchMainView('viewTimetable', this)">
+                        <a href="javascript:void(0)"><i class="fa-solid fa-calendar-days"></i> <span>Room Allocation</span></a>
+                    </li>
+                    <li class="nav-item" id="navImport" onclick="switchMainView('viewExcelImport', this)">
+                        <a href="javascript:void(0)"><i class="fa-solid fa-file-excel"></i> <span>Update Room View</span></a>
+                    </li>
+                    <li class="nav-item" id="navRooms" onclick="switchMainView('viewRoomsManager', this)">
+                        <a href="javascript:void(0)"><i class="fa-solid fa-door-open"></i> <span>Rooms Manager</span></a>
+                    </li>
+                    <li class="nav-item" id="navRequests" onclick="switchMainView('viewRoomRequests', this)">
+                        <a href="javascript:void(0)">
+                            <i class="fa-solid fa-paper-plane"></i> <span>Room Requests</span>
+                            <span class="badge bg-purple" id="pendingRequestsBadge" style="display:none; margin-left: auto;">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="navAdminCreds" style="display: none;" onclick="switchMainView('viewAdminCreds', this)">
+                        <a href="javascript:void(0)"><i class="fa-solid fa-user-shield"></i> <span>Coordinator Management</span></a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Right Content Area -->
+        <div class="uet-content-wrapper">
+
+            <!-- Top Header Navbar -->
+            <header class="uet-header no-print">
+                <div class="header-left">
+                    <button class="btn-sidebar-toggle" onclick="toggleSidebar()">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+                    <h1 class="header-title" id="pageHeaderTitle">Campus Resource Utilization</h1>
+                </div>
+
+                <!-- Header Actions: Search, Profile -->
+                <div class="header-right">
+                    <div class="theme-toggle" id="themeToggleHeader">
+                        <button type="button" class="theme-toggle-btn" data-theme-option="sage" onclick="setTheme('sage')">
+                            <span class="theme-toggle-dot dot-sage"></span> Sage
+                        </button>
+                        <button type="button" class="theme-toggle-btn" data-theme-option="indigo" onclick="setTheme('indigo')">
+                            <span class="theme-toggle-dot dot-indigo"></span> Indigo
+                        </button>
+                        <button type="button" class="theme-toggle-btn" data-theme-option="ocean" onclick="setTheme('ocean')">
+                            <span class="theme-toggle-dot dot-ocean"></span> Ocean
+                        </button>
+                    </div>
+                    <div class="header-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="globalSearchInput" placeholder="Search room or course..." oninput="handleSearch()">
+                    </div>
+
+                    <div class="user-profile-menu" id="userProfileContainer">
+                        <!-- Rendered by auth.js -->
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Body Container -->
+            <main class="uet-main-body">
+
+                <!-- Top Announcement Banner -->
+                <div class="alert-banner no-print" id="alertBanner">
+                    <div class="banner-content">
+                        <i class="fa-solid fa-shield-halved banner-icon"></i>
+                        <span><strong>UET KSK Multi-Department Isolation:</strong> Logged-in coordinators can view all timetables,
+              add rooms, and modify schedules for their own department.</span>
+                    </div>
+                    <button class="btn-close-banner" onclick="this.parentElement.style.display='none'">&times;</button>
+                </div>
+
+                <!-- VIEW 1: CAMPUS RESOURCE UTILIZATION OVERVIEW -->
+                <section id="viewDashboard" class="main-view active">
+
+                    <!-- Requirement 1/4/9: Sub-Tab Segmented Navigation -->
+                    <div class="dash-subtabs no-print" id="dashSubtabsBar">
+                        <button class="dash-subtab active" id="dashSubtabBtn-overview" onclick="switchDashSubTab('overview')">
+              <i class="fa-solid fa-chart-pie"></i> <span>Overview</span>
+            </button>
+                        <button class="dash-subtab" id="dashSubtabBtn-deptsearch" onclick="switchDashSubTab('deptsearch')">
+              <i class="fa-solid fa-magnifying-glass"></i> <span>Department Statistics</span>
+            </button>
+                        <button class="dash-subtab" id="dashSubtabBtn-analytics" onclick="switchDashSubTab('analytics')">
+              <i class="fa-solid fa-sitemap"></i> <span>Department & Room Navigation Tree</span>
+            </button>
+                        <button class="dash-subtab" id="dashSubtabBtn-rooms" onclick="switchDashSubTab('rooms')">
+              <i class="fa-solid fa-door-open"></i> <span>Rooms & Utilization</span>
+            </button>
+                        <button class="dash-subtab" id="dashSubtabBtn-faculty" onclick="switchDashSubTab('faculty')">
+              <i class="fa-solid fa-id-card"></i> <span>Faculty Directory</span>
+            </button>
+                        <button class="dash-subtab" id="dashSubtabBtn-workload" onclick="switchDashSubTab('workload')">
+              <i class="fa-solid fa-chalkboard-user"></i> <span>Faculty Workload</span>
+            </button>
+                        <button class="dash-subtab" id="dashSubtabBtn-resourcesharing" onclick="switchDashSubTab('resourcesharing')">
+              <i class="fa-solid fa-share-nodes"></i> <span>Resource Sharing & Inter-Departmental Overview</span>
+            </button>
+                    </div>
+
+                    <!-- Phase 1 stub panels: real content moves in here during Phase 2-6 -->
+                    <div class="dash-subtab-panel active" id="panelOverview">
+
+                        <!-- Merged Campus Resource Summary + Sharing Overview (single hero card, sidebar layout) -->
+                        <div class="hero-summary-card-v2">
+                            <div class="hero-summary-sidebar">
+                                <div class="hero-summary-sidebar-pattern"></div>
+                                <span class="hero-summary-icon-v2"><i class="fa-solid fa-chart-pie"></i></span>
+                                <h2 class="hero-summary-title-v2">Campus Resource Summary</h2>
+                                <span class="hero-live-badge-v2"><span class="hero-live-dot"></span> Live &nbsp;|&nbsp; Updated just now</span>
+                            </div>
+
+                            <div class="hero-summary-main">
+                                <span class="hero-summary-watermark"><i class="fa-solid fa-chart-pie"></i></span>
+
+                                <!-- <p class="hero-summary-subtitle">Real-time overview of departments, facilities, equipment, and faculty across UET KSK Campus.</p> -->
+
+                                <div class="stat-ticker-row">
+                                    <div class="stat-ticker-item">
+                                        <i class="fa-solid fa-building-columns"></i>
+                                        <div class="stat-ticker-info">
+                                            <span class="stat-ticker-value" id="statDeptCount">0</span>
+                                            <span class="stat-ticker-label">Departments</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="stat-ticker-item">
+                                        <i class="fa-solid fa-door-closed"></i>
+                                        <div class="stat-ticker-info">
+                                            <span class="stat-ticker-value" id="statTotalRoomsCount">0</span>
+                                            <span class="stat-ticker-label">Total Rooms</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="stat-ticker-item">
+                                        <i class="fa-solid fa-flask"></i>
+                                        <div class="stat-ticker-info">
+                                            <span class="stat-ticker-value" id="statLabCount">0</span>
+                                            <span class="stat-ticker-label">Laboratories</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="stat-ticker-item">
+                                        <i class="fa-solid fa-desktop"></i>
+                                        <div class="stat-ticker-info">
+                                            <span class="stat-ticker-value" id="statComputerCount">0</span>
+                                            <span class="stat-ticker-label">Computers</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="stat-ticker-item">
+                                        <i class="fa-solid fa-video"></i>
+                                        <div class="stat-ticker-info">
+                                            <span class="stat-ticker-value" id="statProjectorCount">0</span>
+                                            <span class="stat-ticker-label">Projectors</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="stat-ticker-item">
+                                        <i class="fa-solid fa-user-graduate"></i>
+                                        <div class="stat-ticker-info">
+                                            <span class="stat-ticker-value" id="statFacultyCount">0</span>
+                                            <span class="stat-ticker-label">Faculty Members</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Requirements 4, 9, 10: Department-Wise Graphical Charts & Utilization Percentages -->
+                        <div class="charts-grid-wrapper mt-4">
+                            <div class="card glass-card chart-card">
+                                <div class="card-header border-b">
+                                    <h3><i class="fa-solid fa-chart-column" style="color:#006633;"></i> Department-Wise Resource Allocation
+                                    </h3>
+                                    <span class="badge bg-green" id="badgeGlobalResourceUtil">100% Active</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="chartDeptResources"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card glass-card chart-card">
+                                <div class="card-header border-b">
+                                    <h3><i class="fa-solid fa-chart-line" style="color:#2563eb;"></i> Department Utilization & Occupancy (%)
+                                    </h3>
+                                    <span class="badge bg-blue" id="badgeAvgOccupancy">0% Avg Occupancy</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="chartDeptUtilization"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="charts-grid-wrapper mt-4">
+                            <div class="card glass-card chart-card">
+                                <div class="card-header border-b">
+                                    <h3><i class="fa-solid fa-users" style="color:#7c3aed;"></i> Faculty Designation Ranks Breakdown</h3>
+                                    <span class="badge bg-purple" id="badgeTotalFacultyRanks">7 Designations</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="chartFacultyRanks"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card glass-card chart-card">
+                                <div class="card-header border-b">
+                                    <h3><i class="fa-solid fa-chart-pie" style="color:#ea580c;"></i> Campus Room Categories Breakdown</h3>
+                                    <span class="badge bg-orange" id="badgeRoomTypeRatio">Classrooms vs Labs</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="chartRoomTypes"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="dash-subtab-panel" id="panelDeptSearch">
+
+                        <!-- Department Search Tab: unified search bar + clickable department chips + Room Utilization / Department Statistics split view -->
+                        <div class="card glass-card dstab-search-card mt-4">
+                            <div class="dstab-search-input-wrap">
+                                <i class="fa-solid fa-magnifying-glass dstab-search-icon"></i>
+                                <input type="text" id="deptSearchTabInput" placeholder="Search by department name or code..." autocomplete="off" oninput="handleDeptSearchTabFilter()">
+                            </div>
+
+                            <div class="dstab-chips-label">Or select a department directly</div>
+                            <div class="dstab-chips-scroll-wrap">
+                                <div class="dstab-chips-row" id="deptSearchChipsRow">
+                                    <!-- Rendered dynamically by app.js -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dstab-empty-state" id="deptSearchEmptyState">
+                            <i class="fa-solid fa-building-columns"></i>
+                            <h3>No Department Selected</h3>
+                            <p>Search or click a department chip above to see its Room Utilization and Department Statistics.</p>
+                        </div>
+
+                        <div id="deptSearchResultsContent" class="dstab-results-grid" style="display:none;">
+                            <!-- Rendered dynamically by app.js -->
+                        </div>
+
+                        <div id="deptSearchChartCard" class="card glass-card dstab-chart-card" style="display:none;">
+                            <div class="dstab-card-header">
+                                <span class="dept-icon-badge" id="deptSearchChartIconBadge"><i class="fa-solid fa-chart-simple"></i></span>
+                                <div>
+                                    <h3>Resource Distribution</h3>
+                                    <span class="text-muted text-sm" id="deptSearchChartSubtitle">Department resource breakdown</span>
+                                </div>
+                            </div>
+                            <div class="dstab-chart-container">
+                                <canvas id="chartDeptSearchDistribution"></canvas>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="dash-subtab-panel" id="panelAnalytics">
+
+                        <!-- Department Search Card (live filter, token-match) -->
+                        <div class="card glass-card dept-search-card mt-4">
+                            <div class="dept-search-input-wrap">
+                                <i class="fa-solid fa-magnifying-glass dept-search-icon"></i>
+                                <input type="text" id="dashTreeSearchInput" placeholder="Search by department name or code..." autocomplete="off" oninput="handleDashDeptTreeInlineSearch()">
+                            </div>
+                            <span class="dept-search-hint">Type to search — matching departments will filter live in the list below.</span>
+                        </div>
+
+                        <div class="dashboard-split-grid mt-3">
+                            <div class="card glass-card">
+                                <div class="card-header">
+                                    <h3><i class="fa-solid fa-building-columns"></i> Department & Room Navigation Tree</h3>
+                                    <span class="text-muted text-sm">Click [+] to expand rooms & view room timetable</span>
+                                </div>
+                                <div class="card-body">
+                                    <div id="dashboardDeptTree" class="dept-tree-container">
+                                        <!-- Rendered dynamically -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card glass-card">
+                                <div class="card-header">
+                                    <h3><i class="fa-solid fa-bolt"></i> Quick Tools & Room Finder</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="action-buttons-stack">
+                                        <button class="btn btn-primary btn-full" onclick="openRoomFinderModal()">
+                    <i class="fa-solid fa-door-open"></i> Search Free / Vacant Rooms
+                  </button>
+                                        <button class="btn btn-secondary btn-full" id="btnDashboardExcelImport" onclick="switchMainView('viewExcelImport', document.getElementById('navImport'))">
+                    <i class="fa-solid fa-file-excel"></i> Update Room View Sheet
+                  </button>
+                                        <button class="btn btn-accent btn-full" id="btnDashboardAddSlot" style="display: none;" onclick="openAddSlotModal()">
+                    <i class="fa-solid fa-plus-circle"></i> Add Schedule Slot
+                  </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="dash-subtab-panel" id="panelRooms">
+
+                        <!-- Unified Department Search Card (live filter, token-match — filters both Room Utilization & Department Statistics together) -->
+                        <div class="card glass-card dept-search-card mt-4">
+                            <div class="dept-search-input-wrap">
+                                <i class="fa-solid fa-magnifying-glass dept-search-icon"></i>
+                                <input type="text" id="deptUtilSearchInput" placeholder="Search by department name or code..." autocomplete="off" oninput="handleDeptUtilInlineSearch()">
+                            </div>
+                            <span class="dept-search-hint">Type to search, or click any department row below — Room Utilization and Department Statistics will filter and highlight together.</span>
+                        </div>
+
+                        <!-- Requirement 3: Total Number of Rooms & Utilization Status per Department -->
+                        <div class="card glass-card mt-3">
+                            <div class="card-header border-b">
+                                <div>
+                                    <h2><i class="fa-solid fa-door-open" style="color: var(--primary-color);"></i> Total Campus Rooms & Department Utilization Status</h2>
+                                    <p class="text-muted text-sm">Breakdown of available rooms across each department, active scheduled slots, and calculated utilization percentages.</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="dept-tree-no-match" id="deptUtilNoMatch" style="display:none;">No matching departments found.</div>
+                                <div id="tbodyDeptRoomsUtilization" class="dept-util-rows">
+                                    <!-- Rendered dynamically by app.js -->
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="dash-subtab-panel" id="panelFaculty">
+
+                        <!-- Requirements 6 & 7: Faculty Statistics & Computer Science Faculty Data -->
+                        <div class="card glass-card mt-4 mb-4">
+                            <div class="card-header border-b flex-between">
+                                <div>
+                                    <h2><i class="fa-solid fa-id-card" style="color: var(--primary-color);"></i> Faculty Statistics by Designation
+                                    </h2>
+                                    <p class="text-muted text-sm">Total faculty members across all 7 academic ranks (Professors, Associate Professors, Assistant Professors, Lecturers, Teaching Fellows, Graduate Assistants, Teaching Assistants).
+                                    </p>
+                                </div>
+                                <button class="btn btn-primary" id="btnAddFacultyBtn" style="display: none;" onclick="openFacultyModal()">
+                    <i class="fa-solid fa-user-plus"></i> Add Faculty Member
+                  </button>
+                            </div>
+                            <div class="card-body">
+
+                                <!-- CS Faculty Reference Badge -->
+                                <div class="cs-faculty-reference-box mb-4">
+                                    <div class="cs-ref-icon"><i class="fa-solid fa-globe"></i></div>
+                                    <div class="cs-ref-info">
+                                        <strong>Official Reference Data (Computer Science):</strong>
+                                        <span>Faculty statistics for Computer Science are aligned with the official CS faculty portal at <a
+                          href="https://csksk.uet.edu.pk/faculty/" target="_blank"
+                          rel="noopener">https://csksk.uet.edu.pk/faculty/</a>
+                           (Total CS Faculty: <strong
+                          id="statCsFacultyTotal">27</strong> members).</span>
+                                    </div>
+                                </div>
+
+                                <!-- 7 Ranks Badges Grid -->
+                                <div class="faculty-ranks-grid">
+                                    <div class="rank-badge-card rank-prof">
+                                        <div class="rank-icon"><i class="fa-solid fa-user-tie"></i></div>
+                                        <div class="rank-data">
+                                            <span class="rank-count" id="statProfessorsCount">0</span>
+                                            <span class="rank-label">Professors</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="rank-badge-card rank-assoc">
+                                        <div class="rank-icon"><i class="fa-solid fa-user-gear"></i></div>
+                                        <div class="rank-data">
+                                            <span class="rank-count" id="statAssocProfCount">0</span>
+                                            <span class="rank-label">Associate Professors</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="rank-badge-card rank-asst">
+                                        <div class="rank-icon"><i class="fa-solid fa-user-doctor"></i></div>
+                                        <div class="rank-data">
+                                            <span class="rank-count" id="statAsstProfCount">0</span>
+                                            <span class="rank-label">Assistant Professors</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="rank-badge-card rank-lecturer">
+                                        <div class="rank-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                                        <div class="rank-data">
+                                            <span class="rank-count" id="statLecturersCount">0</span>
+                                            <span class="rank-label">Lecturers</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="rank-badge-card rank-tf">
+                                        <div class="rank-icon"><i class="fa-solid fa-user-graduate"></i></div>
+                                        <div class="rank-data">
+                                            <span class="rank-count" id="statTeachingFellowsCount">0</span>
+                                            <span class="rank-label">Teaching Fellows</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="rank-badge-card rank-ga">
+                                        <div class="rank-icon"><i class="fa-solid fa-book-open-reader"></i></div>
+                                        <div class="rank-data">
+                                            <span class="rank-count" id="statGradAsstCount">0</span>
+                                            <span class="rank-label">Graduate Assistants</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="rank-badge-card rank-ta">
+                                        <div class="rank-icon"><i class="fa-solid fa-hand-holding-hand"></i></div>
+                                        <div class="rank-data">
+                                            <span class="rank-count" id="statTeachAsstCount">0</span>
+                                            <span class="rank-label">Teaching Assistants</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Faculty Table Filter & Search -->
+                                <div class="faculty-filter-bar mt-4 mb-3">
+                                    <div class="form-group mb-0 faculty-filter-search" style="flex:1; max-width: 320px;">
+                                        <i class="fa-solid fa-magnifying-glass faculty-filter-search-icon"></i>
+                                        <input type="text" id="facultySearchInput" placeholder="Search faculty member name or email..." oninput="renderFacultyTable()">
+                                    </div>
+                                    <div class="form-group mb-0" style="flex:1; max-width: 280px;">
+                                        <select id="facultyDeptFilter" onchange="renderFacultyTable()">
+                        <option value="">All Departments</option>
+                      </select>
+                                    </div>
+                                    <div class="form-group mb-0" style="flex:1; max-width: 250px;">
+                                        <select id="facultyDesigFilter" onchange="renderFacultyTable()">
+                        <option value="">All Designations</option>
+                        <option value="Professor">Professor</option>
+                        <option value="Associate Professor">Associate Professor</option>
+                        <option value="Assistant Professor">Assistant Professor</option>
+                        <option value="Lecturer">Lecturer</option>
+                        <option value="Teaching Fellow">Teaching Fellow</option>
+                        <option value="Graduate Assistant">Graduate Assistant</option>
+                        <option value="Teaching Assistant">Teaching Assistant</option>
+                      </select>
+                                    </div>
+                                </div>
+
+                                <!-- Faculty Members List -->
+                                <div id="tbodyFacultyList" class="faculty-row-list">
+                                    <!-- Rendered dynamically by app.js -->
+                                </div>
+
+                                <!-- Faculty Designation Breakdown Chart (shown only when a specific department is selected) -->
+                                <div class="card glass-card chart-card mt-4" id="facultyDeptDesigChartCard" style="display:none;">
+                                    <div class="card-header border-b">
+                                        <h3><i class="fa-solid fa-chart-bar" style="color:#7c3aed;"></i> <span id="facultyDeptDesigChartTitle">Faculty Designation Breakdown</span></h3>
+                                        <span class="badge bg-purple" id="badgeFacultyDeptDesigTotal">0 Faculty</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="chartFacultyDeptDesig"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="dash-subtab-panel" id="panelWorkload">
+
+                        <!-- Requirements 19, 20, 21: Faculty / Teacher Workload & Utilization Module -->
+                        <div class="card glass-card mt-4 mb-4">
+                            <div class="card-header border-b flex-between">
+                                <div>
+                                    <h2><i class="fa-solid fa-chalkboard-user" style="color: var(--primary-color);"></i> Teacher Utilization & Teaching Workload Module</h2>
+                                    <p class="text-muted text-sm">Calculates faculty teaching workload based on assigned schedule slots, credit hours, and target capacity using consistent Green (100% Available), Yellow (Moderate Load), and Red (100% Full Workload) status indicators.</p>
+                                </div>
+                                <span class="badge bg-green" id="badgeAvgFacultyUtilization">0% Avg Faculty Load</span>
+                            </div>
+                            <div class="card-body">
+
+                                <!-- Workload Table Filter & Search -->
+                                <div class="faculty-filter-bar mb-3">
+                                    <div class="form-group mb-0 faculty-filter-search" style="flex:1; max-width: 320px;">
+                                        <i class="fa-solid fa-magnifying-glass faculty-filter-search-icon"></i>
+                                        <input type="text" id="workloadSearchInput" placeholder="Search faculty member name or email..." oninput="renderFacultyWorkloadTable()">
+                                    </div>
+                                    <div class="form-group mb-0" style="flex:1; max-width: 280px;">
+                                        <select id="workloadDeptFilter" onchange="renderFacultyWorkloadTable()">
+                        <option value="">Select Department</option>
+                      </select>
+                                    </div>
+                                    <div class="form-group mb-0" style="flex:1; max-width: 250px;">
+                                        <select id="workloadDesigFilter" onchange="renderFacultyWorkloadTable()">
+                        <option value="">All Designations</option>
+                        <option value="Professor">Professor</option>
+                        <option value="Associate Professor">Associate Professor</option>
+                        <option value="Assistant Professor">Assistant Professor</option>
+                        <option value="Lecturer">Lecturer</option>
+                        <option value="Teaching Fellow">Teaching Fellow</option>
+                        <option value="Graduate Assistant">Graduate Assistant</option>
+                        <option value="Teaching Assistant">Teaching Assistant</option>
+                      </select>
+                                    </div>
+                                </div>
+
+                                <div class="workload-scroll-wrapper">
+                                    <div id="tbodyFacultyWorkload" class="faculty-row-list">
+                                        <!-- Rendered dynamically by app.js -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="dash-subtab-panel" id="panelResourceSharing">
+
+                        <div class="rs-stat-row mt-4">
+                            <div class="rs-stat-card accent-purple">
+                                <span class="rs-stat-icon" style="background:#7c3aed22; color:#7c3aed;"><i class="fa-solid fa-chart-pie"></i></span>
+                                <div class="rs-stat-info">
+                                    <span class="rs-stat-label">Shared Resource Utilization</span>
+                                    <span class="rs-stat-value" style="color:#7c3aed;" id="statSharedResourcePct">0%</span>
+                                </div>
+                            </div>
+
+                            <div class="rs-stat-card accent-blue">
+                                <span class="rs-stat-icon" style="background:#2563eb22; color:#2563eb;"><i class="fa-solid fa-database"></i></span>
+                                <div class="rs-stat-info">
+                                    <span class="rs-stat-label">Independent Resource Utilization</span>
+                                    <span class="rs-stat-value" style="color:#2563eb;" id="statIndependentResourcePct">0%</span>
+                                </div>
+                            </div>
+
+                            <div class="rs-stat-card accent-teal">
+                                <span class="rs-stat-icon" style="background:#0891b222; color:#0891b2;"><i class="fa-solid fa-share-nodes"></i></span>
+                                <div class="rs-stat-info">
+                                    <span class="rs-stat-label">Inter-Dept Sharing Slots</span>
+                                    <span class="rs-stat-value" style="color:#0891b2;" id="statInterDeptSupportPct">0%</span>
+                                </div>
+                            </div>
+
+                            <div class="rs-stat-card accent-green">
+                                <span class="rs-stat-icon" style="background:#16a34a22; color:#16a34a;"><i class="fa-solid fa-circle-check"></i></span>
+                                <div class="rs-stat-info">
+                                    <span class="rs-stat-label">Full Availability</span>
+                                    <span class="rs-stat-value" style="color:#16a34a;" id="statGreenAvailablePct">100%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="charts-grid-wrapper mt-4">
+                            <div class="card glass-card chart-card">
+                                <div class="card-header border-b">
+                                    <h3><i class="fa-solid fa-chart-pie" style="color:#7c3aed;"></i> Shared vs Independent Resource Allocation
+                                    </h3>
+                                    <span class="badge bg-purple" id="badgeSharedVsIndependent">Shared vs Dedicated</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="chartSharedVsIndependent"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card glass-card chart-card">
+                                <div class="card-header border-b">
+                                    <h3><i class="fa-solid fa-chart-bar" style="color:#0891b2;"></i> Inter-Departmental Resource Support
+                                    </h3>
+                                    <span class="badge bg-teal" id="badgeInterDeptSupport">Cross-Dept Support</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="chartInterDeptSupport"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+                <!-- VIEW 2: DEPARTMENTS & ROOMS TREE VIEW -->
+                <section id="viewDeptsTree" class="main-view" style="display: none;">
+
+                    <!-- Search Departments Card -->
+                    <div class="card glass-card dept-search-card">
+                        <div class="dept-search-input-wrap">
+                            <i class="fa-solid fa-magnifying-glass dept-search-icon"></i>
+                            <input type="text" id="deptTreeSearchInput" placeholder="Search by department name or code..." autocomplete="off" oninput="handleDeptTreeInlineSearch()">
+                        </div>
+                        <span class="dept-search-hint">Type to search — matching departments will filter live in the list below.</span>
+                    </div>
+
+                    <div class="card glass-card">
+                        <div class="card-header border-b">
+                            <div>
+                                <h2><i class="fa-solid fa-building-columns"></i> Departments & Room Allocation Tree</h2>
+                                <p class="text-muted">Expand any department with [+] to see rooms (G-10, G-11, G-16, F-04, G-05, etc.) and click any room to inspect its weekly timetable.</p>
+                            </div>
+                            <div class="header-actions">
+                                <button class="btn btn-accent" id="btnTreeAddDept" style="display: none;" onclick="openDeptManagementModal()">
+                  <i class="fa-solid fa-plus"></i> Add New Department
+                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="mainDeptTreeContainer" class="dept-tree-container large-tree">
+                                <!-- Dynamically rendered collapsible tree view -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 3: CENTRALIZED TIMETABLE MATRIX -->
+                <section id="viewTimetable" class="main-view" style="display: none;">
+                    <!-- Control Filter Panel -->
+                    <div class="control-panel no-print mb-4">
+                        <div class="filter-group">
+                            <div class="filter-item">
+                                <label><i class="fa-solid fa-building-columns"></i> Department</label>
+                                <select id="filterDept" onchange="renderTimetable()">
+                  <option value="">🏛️ All Departments (Central Master View)</option>
+                </select>
+                            </div>
+
+                            <div class="filter-item">
+                                <label><i class="fa-solid fa-layer-group"></i> Semester</label>
+                                <select id="filterSemester" onchange="renderTimetable()">
+                  <option value="">All Semesters</option>
+                  <option value="1">Semester 1</option>
+                  <option value="2">Semester 2</option>
+                  <option value="3">Semester 3</option>
+                  <option value="4">Semester 4</option>
+                  <option value="5">Semester 5</option>
+                  <option value="6">Semester 6</option>
+                  <option value="7">Semester 7</option>
+                  <option value="8">Semester 8</option>
+                </select>
+                            </div>
+
+                            <div class="filter-item">
+                                <label><i class="fa-solid fa-calendar-day"></i> Day</label>
+                                <select id="filterDay" onchange="renderTimetable()">
+                  <option value="">All Days (Mon - Fri)</option>
+                  <option value="Monday">Monday</option>
+                  <option value="Tuesday">Tuesday</option>
+                  <option value="Wednesday">Wednesday</option>
+                  <option value="Thursday">Thursday</option>
+                  <option value="Friday">Friday</option>
+                </select>
+                            </div>
+
+                            <div class="filter-item">
+                                <label><i class="fa-solid fa-door-closed"></i> Room Filter</label>
+                                <select id="filterRoom" onchange="renderTimetable()">
+                  <option value="">All Rooms</option>
+                </select>
+                            </div>
+                        </div>
+
+                        <div class="panel-actions">
+                            <button class="btn btn-secondary" onclick="openRoomFinderModal()">
+                <i class="fa-solid fa-door-open"></i> Find Free Rooms
+              </button>
+                            <button class="btn btn-secondary" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> Print / PDF
+              </button>
+
+                            <button class="btn btn-outline" id="btnToggleTimetableView" onclick="toggleTimetableViewMode()">
+                <i class="fa-solid fa-table-cells"></i> Switch to Color Grid View
+              </button>
+
+                            <!-- 1-Click Clear Entire Department Timetable Slots Button -->
+                            <button class="btn btn-outline" id="btnClearDeptTimetable" style="display: none; color: var(--danger); border-color: var(--danger);" onclick="handleClearDeptTimetable()">
+                <i class="fa-solid fa-eraser"></i> Clear Dept Timetable (1-Click)
+              </button>
+
+                            <button class="btn btn-primary" id="btnAddSlot" style="display: none;" onclick="openAddSlotModal()">
+                <i class="fa-solid fa-plus-circle"></i> Add Schedule Slot
+              </button>
+                        </div>
+                    </div>
+
+                    <!-- Status Bar -->
+                    <div class="status-bar mb-3">
+                        <div id="activeFilterBadge" class="filter-badge-list">
+                            <span class="badge badge-default">Showing Centralized University Schedule</span>
+                        </div>
+                        <div class="stats-counter" id="slotCounter">
+                            Showing <strong id="slotCountNumber">0</strong> scheduled lectures/labs
+                        </div>
+                    </div>
+
+                    <!-- Central Schedule Grid Container -->
+                    <div class="timetable-card">
+                        <div class="table-responsive" id="timetablePrintArea">
+                            <div class="print-header">
+                                <h2>UET KSK Centralized University Timetable Schedule</h2>
+                                <p id="printSubtitle">Official Kala Shah Kaku Campus Schedule Portal</p>
+                            </div>
+
+                            <div id="gridWrapper" class="grid-wrapper">
+                                <!-- Timetable Matrix Grid rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 4: DRAG & DROP EXCEL FILE IMPORTER -->
+                <section id="viewExcelImport" class="main-view" style="display: none;">
+                    <div class="card glass-card">
+                        <div class="card-header border-b">
+                            <div>
+                                <h2><i class="fa-solid fa-file-excel"></i> Update Room View</h2>
+                                <p class="text-muted">Upload your department's room view spreadsheet (`.xlsx` or `.csv`) to automatically populate schedule slots into the database.</p>
+                            </div>
+                            <div>
+                                <button class="btn btn-success" onclick="downloadExcelTemplate()">
+                  <i class="fa-solid fa-file-excel"></i> Download Pattern Template (.xlsx)
+                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+
+                            <!-- Dropzone Container -->
+                            <div class="dropzone" id="excelDropzone">
+                                <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+                                <h3>Drag & Drop your Department `.xlsx` File Here</h3>
+                                <p>or click to browse and select file from your computer</p>
+                                <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" style="display: none;" onchange="handleFileSelect(event)">
+                                <div class="d-flex align-items-center justify-content-center gap-3 mt-3">
+                                    <button class="btn btn-primary" onclick="document.getElementById('excelFileInput').click()">
+                    <i class="fa-solid fa-folder-open"></i> Browse Excel File
+                  </button>
+                                    <button class="btn btn-success" onclick="downloadExcelTemplate()">
+                    <i class="fa-solid fa-file-excel"></i> Download Pattern Template
+                  </button>
+                                </div>
+                            </div>
+
+                            <!-- Quick Preset Importer for dashboard.xlsx -->
+                            <div class="preset-import-box mt-4">
+                                <h4><i class="fa-solid fa-database"></i> Pre-Loaded Campus Dummy Data (`dashboard.xlsx`)</h4>
+                                <p>Click below to automatically read and parse the campus `dashboard.xlsx` dummy dataset into your active department schedule.</p>
+                                <button class="btn btn-accent mt-2" onclick="importPresetDashboardXlsx()">
+                  <i class="fa-solid fa-bolt"></i> Auto-Import `dashboard.xlsx` File Data
+                </button>
+                            </div>
+
+                            <div id="importResultStatus" class="mt-4" style="display: none;"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 5: ROOMS MANAGER PER DEPARTMENT -->
+                <section id="viewRoomsManager" class="main-view" style="display: none;">
+
+                    <!-- Find Room by Department Card -->
+                    <div class="card glass-card find-room-card">
+                        <div class="find-room-card-header">
+                            <div class="find-room-icon-box"><i class="fa-solid fa-door-open"></i></div>
+                            <h3>Find Room by Department</h3>
+                        </div>
+
+                        <div class="find-room-fields">
+                            <div class="find-room-field">
+                                <label><i class="fa-solid fa-building-columns"></i> Department</label>
+                                <div class="dept-combo" id="findRoomDeptCombo">
+                                    <div class="dept-combo-input-wrap">
+                                        <i class="fa-solid fa-magnifying-glass dept-combo-icon"></i>
+                                        <input type="text" id="findRoomDept" class="dept-combo-input" placeholder="Search or select department..." autocomplete="off">
+                                        <i class="fa-solid fa-chevron-down dept-combo-chevron" id="findRoomDeptChevron"></i>
+                                    </div>
+                                    <div class="dept-combo-list" id="findRoomDeptList" style="display:none;"></div>
+                                </div>
+                            </div>
+
+                            <div class="find-room-field">
+                                <label><i class="fa-solid fa-door-closed"></i> Room</label>
+                                <input type="text" id="findRoomInput" list="findRoomDatalist" placeholder="Select department first..." oninput="onFindRoomInputChange()">
+                                <datalist id="findRoomDatalist"></datalist>
+                            </div>
+                        </div>
+
+                        <div class="find-room-hint">
+                            <i class="fa-solid fa-circle-info"></i> Choose a department to see available rooms, or type a new room name.
+                        </div>
+
+                        <div class="find-room-actions">
+                            <button type="button" class="btn-find-room" onclick="handleFindRoomSchedule()">
+                                <i class="fa-solid fa-calendar-check"></i> View Room Schedule
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card glass-card">
+                        <div class="card-header border-b">
+                            <div>
+                                <h2><i class="fa-solid fa-door-open"></i> Department Rooms & Labs Dashboard</h2>
+                                <p class="text-muted">Manage classrooms, capacity (chairs count), projector setup, and computer labs for your department.</p>
+                            </div>
+                            <button class="btn btn-primary" id="btnAddRoom" onclick="openAddRoomModal()">
+                <i class="fa-solid fa-plus"></i> Add New Room
+              </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="roomsListGrid">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 6: SUPER ADMIN COORDINATOR CREDENTIALS MANAGER -->
+                <section id="viewAdminCreds" class="main-view" style="display: none;">
+
+                    <!-- Search Coordinator Credentials Card -->
+                    <div class="card glass-card creds-search-card">
+                        <div class="creds-search-input-wrap">
+                            <i class="fa-solid fa-magnifying-glass creds-search-icon"></i>
+                            <input type="text" id="credsSearchInput" placeholder="Search by username, email, or department..." autocomplete="off" oninput="handleCredsSearch()">
+                        </div>
+                        <span class="creds-search-hint">Type to search — matching accounts will shortlist live in the list below as you type.</span>
+                    </div>
+
+                    <div class="card glass-card">
+                        <div class="card-header border-b">
+                            <div>
+                                <h2><i class="fa-solid fa-user-shield"></i> Master Department Coordinator Credentials</h2>
+                                <p class="text-muted">Super Admin dashboard to create departments, assign department heads, and manage login credentials.</p>
+                            </div>
+                            <button class="btn btn-accent" onclick="openDeptManagementModal()">
+                <i class="fa-solid fa-building-circle-check"></i> + Add Dept & Coordinator
+              </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="adminCredsTableContainer">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 7: CROSS-DEPARTMENT ROOM ALLOCATION REQUEST MANAGER -->
+                <section id="viewRoomRequests" class="main-view" style="display: none;">
+                    <div class="card glass-card">
+                        <div class="card-header border-b">
+                            <div>
+                                <h2><i class="fa-solid fa-paper-plane"></i> Cross-Department Room Allocation Requests</h2>
+                                <p class="text-muted">Request vacant classrooms & labs owned by other departments for your class, or approve incoming requests for your department's rooms.</p>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary" id="btnOpenRequestModal" onclick="openRoomRequestModal()">
+                  <i class="fa-solid fa-plus-circle"></i> Submit Room Request
+                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex gap-2 mb-4 border-b pb-2 flex-wrap">
+                                <button class="btn btn-outline active" id="tabIncomingReqs" onclick="switchRequestTab('incoming')">
+                  <i class="fa-solid fa-inbox"></i> Incoming Requests for My Rooms <span class="badge bg-purple"
+                    id="tabIncomingBadge">0</span>
+                </button>
+                                <button class="btn btn-outline" id="tabOutgoingReqs" onclick="switchRequestTab('outgoing')">
+                  <i class="fa-solid fa-paper-plane"></i> My Sent Requests <span class="badge badge-default"
+                    id="tabOutgoingBadge">0</span>
+                </button>
+                                <button class="btn btn-outline" id="tabAllReqs" onclick="switchRequestTab('all')">
+                  <i class="fa-solid fa-list-check"></i> All Department Requests <span class="badge badge-default"
+                    id="tabAllBadge">0</span>
+                </button>
+                            </div>
+
+                            <div id="roomRequestsListContainer">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 8: ACCOUNT & SECURITY SETTINGS (FOR ALL ROLES) -->
+                <section id="viewSettings" class="main-view" style="display: none;">
+                    <div class="card glass-card modal-large" style="margin: 0 auto;">
+                        <div class="card-header border-b">
+                            <div>
+                                <h2><i class="fa-solid fa-gear"></i> Account & Security Settings</h2>
+                                <p class="text-muted">Manage your full name, email, login username, and password credentials.</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form id="settingsForm" onsubmit="handleUpdateSettings(event)">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>Full Name <span class="req">*</span></label>
+                                        <input type="text" id="settingFullName" placeholder="e.g. Dr. John Doe" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Email Address</label>
+                                        <input type="email" id="settingEmail" placeholder="e.g. john@uet.edu.pk">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Login Username <span class="req">*</span></label>
+                                        <input type="text" id="settingUsername" placeholder="e.g. cs_admin" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Role & Department</label>
+                                        <input type="text" id="settingRoleDept" readonly disabled style="background: #f1f5f9; cursor: not-allowed; font-weight:600;">
+                                    </div>
+                                </div>
+
+                                <hr style="border-color: var(--border-color); margin: 20px 0;">
+
+                                <h4><i class="fa-solid fa-lock"></i> Security & Authorization</h4>
+                                <div class="form-grid mt-2">
+                                    <div class="form-group">
+                                        <label>Current Password <span class="req">*</span> <small class="text-muted">(Required to save
+                        changes)</small></label>
+                                        <input type="password" id="settingCurrentPassword" placeholder="••••••••" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>New Password <small class="text-muted">(Leave blank to keep unchanged)</small></label>
+                                        <input type="password" id="settingNewPassword" placeholder="••••••••">
+                                    </div>
+                                </div>
+
+                                <div id="settingsSuccess" class="alert-banner mt-2" style="display: none; background: #f0fdf4; border-color: #bbf7d0; color: #15803d;"></div>
+                                <div id="settingsError" class="form-error mt-2" style="display: none;"></div>
+
+                                <div class="modal-footer mt-3" style="position: static; margin: 20px 0 0 0; padding-right: 0;">
+                                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save
+                    Settings</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-right-to-bracket"></i> Login to UET KSK Portal</h3>
+                <button class="modal-close" onclick="closeLoginModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="loginUsername" placeholder="e.g. cs_admin or admin" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                    </div>
+                    <div id="loginError" class="form-error" style="display: none;"></div>
+                    <button type="submit" class="btn btn-primary btn-full">Login</button>
+                </form>
+
+                <div class="demo-accounts">
+                    <h4><i class="fa-solid fa-key"></i> Quick Demo Logins:</h4>
+                    <div class="demo-chips">
+                        <button class="chip" onclick="fillLogin('admin', 'admin123')">🔑 Super Admin (admin / admin123)</button>
+                        <button class="chip" onclick="fillLogin('cs_admin', 'cs123')">💻 CS Coordinator (cs_admin / cs123)</button>
+                        <button class="chip" onclick="fillLogin('ee_admin', 'ee123')">⚡ EE Coordinator (ee_admin / ee123)</button>
+                        <button class="chip" onclick="fillLogin('me_admin', 'me123')">⚙️ ME Coordinator (me_admin / me123)</button>
+                        <button class="chip" onclick="fillLogin('civ_admin', 'civ123')">🏗️ CIV Coordinator (civ_admin / civ123)</button>
+                        <button class="chip" onclick="fillLogin('env_admin', 'env123')">🌿 ENV Coordinator (env_admin / env123)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Timetable Entry Modal -->
+    <div class="modal" id="slotModal">
+        <div class="modal-content glass-card modal-large">
+            <div class="modal-header">
+                <h3 id="slotModalTitle"><i class="fa-solid fa-calendar-plus"></i> Add Timetable Schedule Slot</h3>
+                <button class="modal-close" onclick="closeSlotModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="slotForm" onsubmit="handleSaveSlot(event)">
+                    <input type="hidden" id="slotId">
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Department <span class="req">*</span></label>
+                            <select id="slotDept" required onchange="onSlotDeptChange()"></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Course Name <span class="req">*</span> <small class="text-muted">(Select or Type
+                  New)</small></label>
+                            <input type="text" id="slotCourse" list="slotCourseDatalist" placeholder="e.g. Programming Fundamentals" required autocomplete="off">
+                            <datalist id="slotCourseDatalist"></datalist>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Classroom / Lab <span class="req">*</span></label>
+                            <select id="slotRoom" required onchange="onSlotRoomChange()"></select>
+                            <div id="slotRoomNotice" class="mt-1" style="display: none;"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Day of Week <span class="req">*</span></label>
+                            <select id="slotDay" required>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+              </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Start Time <span class="req">*</span> <small class="text-muted">(Min: 07:30 AM)</small></label>
+                            <input type="time" id="slotStart" required value="08:00" min="07:30" max="16:00">
+                        </div>
+
+                        <div class="form-group">
+                            <label>End Time <span class="req">*</span> <small class="text-muted">(Max: 04:00 PM)</small></label>
+                            <input type="time" id="slotEnd" required value="09:00" min="07:30" max="16:00">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Section Name <span class="req">*</span> <small class="text-muted">(e.g. A, B)</small></label>
+                            <input type="text" id="slotSection" placeholder="e.g. A, B or C" value="A" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Semester <span class="req">*</span></label>
+                            <select id="slotSemester" required>
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3">Semester 3</option>
+                <option value="4">Semester 4</option>
+                <option value="5">Semester 5</option>
+                <option value="6">Semester 6</option>
+                <option value="7">Semester 7</option>
+                <option value="8">Semester 8</option>
+              </select>
+                        </div>
+                    </div>
+
+                    <div id="slotError" class="form-error" style="display: none;"></div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline" onclick="closeSlotModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Schedule Slot</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Room Availability Finder Modal -->
+    <div class="modal" id="roomFinderModal">
+        <div class="modal-content glass-card modal-large">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-door-open"></i> Room & Lab Availability Lookup</h3>
+                <button class="modal-close" onclick="closeRoomFinderModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="roomFinderForm" onsubmit="checkRoomAvailability(event)" class="finder-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Department</label>
+                            <input type="text" id="rfDept" list="rfDeptDatalist" placeholder="Select or type department..." required onfocus="populateRoomFinderDeptDropdown()" oninput="onRoomFinderDeptChange()">
+                            <datalist id="rfDeptDatalist"></datalist>
+                        </div>
+                        <div class="form-group">
+                            <label>Select Day</label>
+                            <select id="rfDay" required>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+              </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Start Time</label>
+                            <input type="time" id="rfStart" value="08:00" required>
+                        </div>
+                        <div class="form-group">
+
+                            <label>End Time</label>
+                            <input type="time" id="rfEnd" value="09:00" required>
+                        </div>
+                        <div class="form-group" style="display:flex; align-items:flex-end;">
+                            <button type="submit" class="btn btn-primary btn-full">Search Free Rooms</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="roomFinderDeptSummary" class="rf-dept-summary" style="display:none;">
+                    <div class="rf-summary-item">
+                        <span class="rf-summary-value" id="rfSummaryTotal">0</span>
+                        <span class="rf-summary-label">Total Rooms</span>
+                    </div>
+                    <div class="rf-summary-item">
+                        <span class="rf-summary-value" id="rfSummaryOccupied">0</span>
+                        <span class="rf-summary-label">Occupied</span>
+                    </div>
+                    <div class="rf-summary-item">
+                        <span class="rf-summary-value" id="rfSummaryAvailable">0</span>
+                        <span class="rf-summary-label">Available</span>
+                    </div>
+                </div>
+
+                <div id="roomFinderResults" class="room-results-container">
+                    <p class="placeholder-text">Select a department, day and time range above to query vacant classrooms.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Department & Coordinator Account Modal (Super Admin) -->
+    <div class="modal" id="deptMgmtModal">
+        <div class="modal-content glass-card modal-large">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-building-circle-check"></i> Add Department & Coordinator Credentials</h3>
+                <button class="modal-close" onclick="closeDeptManagementModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addDeptCombinedForm" onsubmit="handleCreateDeptWithCredentials(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Department Name <span class="req">*</span></label>
+                            <input type="text" id="newDeptName" placeholder="e.g. Civil Engineering" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Department Code <span class="req">*</span></label>
+                            <input type="text" id="newDeptCode" placeholder="e.g. CIV" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Badge Color <span class="req">*</span></label>
+                            <input type="color" id="newDeptColor" value="#006633" style="width: 100%; height: 40px; border:none; cursor:pointer;" required>
+                        </div>
+                    </div>
+
+                    <hr style="border-color: var(--border-color); margin: 20px 0;">
+
+                    <h4><i class="fa-solid fa-user-key"></i> Department Coordinator Account (Primary Editor)</h4>
+                    <div class="form-grid mt-2">
+                        <div class="form-group">
+                            <label>Coordinator Full Name <span class="req">*</span></label>
+                            <input type="text" id="newCoordName" placeholder="Dr. John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Login Username <span class="req">*</span></label>
+                            <input type="text" id="newCoordUsername" placeholder="civ_admin" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Login Password <span class="req">*</span></label>
+                            <input type="password" id="newCoordPassword" placeholder="••••••••" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address <span class="req">*</span></label>
+                            <input type="email" id="newCoordEmail" placeholder="civ@uet.edu.pk" required>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer mt-3">
+                        <button type="button" class="btn btn-outline" onclick="closeDeptManagementModal()">Cancel</button>
+                        <button type="submit" class="btn btn-accent">Create Dept & Credentials</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Room Modal -->
+    <div class="modal" id="addRoomModal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3 id="addRoomModalTitle"><i class="fa-solid fa-door-plus"></i> Add New Room / Lab</h3>
+                <button class="modal-close" onclick="closeAddRoomModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addRoomForm" onsubmit="handleCreateRoom(event)">
+                    <input type="hidden" id="editRoomId">
+
+                    <div class="form-group">
+                        <label>Target Department <span class="req">*</span></label>
+                        <select id="roomDept" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Room Name / Number <span class="req">*</span></label>
+                        <input type="text" id="roomName" placeholder="e.g. G-10 or G-05" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Seating Capacity (Chairs) <span class="req">*</span></label>
+                        <input type="number" id="roomCapacity" value="50" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Room Category / Type <span class="req">*</span></label>
+                        <select id="roomType" required onchange="onRoomTypeChange()">
+              <option value="Lecture Hall">Lecture Room</option>
+              <option value="Computer Lab">Computer Lab</option>
+              <option value="Science Lab">Science Lab</option>
+              <option value="Seminar Hall">Seminar Hall</option>
+              <option value="Auditorium">Auditorium</option>
+            </select>
+                    </div>
+
+                    <!-- Conditional Field: Shown when Room Type is Computer Lab or Science Lab -->
+                    <div class="form-group" id="computersGroup" style="display: none;">
+                        <label id="computersGroupLabel">Number of Computers / Lab Stations <span class="req">*</span></label>
+                        <input type="number" id="roomComputers" value="40" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Projector Available? <span class="req">*</span></label>
+                        <select id="roomProjector" required>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+                    </div>
+
+                    <button type="submit" id="addRoomSubmitBtn" class="btn btn-primary btn-full mt-3">Add Room</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Cross-Department Room Request Modal -->
+    <div class="modal" id="roomRequestModal">
+        <div class="modal-content glass-card modal-large">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-paper-plane"></i> Request Cross-Department Room Allocation</h3>
+                <button class="modal-close" onclick="closeRoomRequestModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="roomRequestForm" onsubmit="handleCreateRoomRequest(event)">
+                    <div class="form-grid">
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label>Select Target Room (Belonging to another department) <span class="req">*</span></label>
+                            <select id="reqRoom" required onchange="checkRequestRoomVacancy()"></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Day of Week <span class="req">*</span></label>
+                            <select id="reqDay" required onchange="checkRequestRoomVacancy()">
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+              </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Start Time <span class="req">*</span></label>
+                            <input type="time" id="reqStart" required value="08:00" onchange="checkRequestRoomVacancy()">
+                        </div>
+
+                        <div class="form-group">
+                            <label>End Time <span class="req">*</span></label>
+                            <input type="time" id="reqEnd" required value="09:00" onchange="checkRequestRoomVacancy()">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Course Code <span class="req">*</span></label>
+                            <input type="text" id="reqCourseCode" placeholder="e.g. CS-101" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Course / Subject Name <span class="req">*</span></label>
+                            <input type="text" id="reqCourseName" placeholder="e.g. Programming Fundamentals" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Class Section <span class="req">*</span></label>
+                            <input type="text" id="reqSection" placeholder="e.g. CS-1A" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Semester <span class="req">*</span></label>
+                            <select id="reqSemester" required>
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3">Semester 3</option>
+                <option value="4">Semester 4</option>
+                <option value="5">Semester 5</option>
+                <option value="6">Semester 6</option>
+                <option value="7">Semester 7</option>
+                <option value="8">Semester 8</option>
+              </select>
+                        </div>
+
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label>Reason / Notes for Owning Department</label>
+                            <input type="text" id="reqNotes" placeholder="e.g. Requesting extra room for combined lab session">
+                        </div>
+                    </div>
+
+                    <div id="reqVacancyStatus" class="mt-2 mb-3"></div>
+                    <div id="reqError" class="form-error" style="display: none;"></div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline" onclick="closeRoomRequestModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="btnSubmitReq">Submit Room Request</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dedicated Department Resource Form / Management Modal (Requirement 8) -->
+    <div class="modal" id="modalDeptResourceManage">
+        <div class="modal-content glass-card modal-large">
+            <div class="modal-header">
+                <h3 id="modalDeptResourceTitle"><i class="fa-solid fa-sliders"></i> Department Resource Management Form</h3>
+                <button class="modal-close" onclick="closeModal('modalDeptResourceManage')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="modalDeptResourceContent">
+                    <!-- Dynamically populated with Department resource details, rooms list, and faculty list -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dedicated Add / Edit Faculty Member Form Modal (Requirement 6 & 8) -->
+    <div class="modal" id="modalFacultyForm">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3 id="modalFacultyTitle"><i class="fa-solid fa-user-plus"></i> Add Faculty Member</h3>
+                <button class="modal-close" onclick="closeModal('modalFacultyForm')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="facultyMemberForm" onsubmit="handleSaveFacultyMember(event)">
+                    <input type="hidden" id="editFacultyId">
+
+                    <div class="form-group">
+                        <label>Department <span class="req">*</span></label>
+                        <select id="facultyDeptId" required></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Full Name <span class="req">*</span></label>
+                        <input type="text" id="facultyName" placeholder="e.g. Dr. Farah Adeeba" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Official Email Address</label>
+                        <input type="email" id="facultyEmail" placeholder="e.g. farah.adeeba@uet.edu.pk">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Contact Phone / Extension</label>
+                        <input type="text" id="facultyPhone" placeholder="e.g. +92 42 99029200 (Ext 104)">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Office Room / Building Location</label>
+                        <input type="text" id="facultyOffice" placeholder="e.g. CS Academic Block, Office 102">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Target Teaching Credit Hours</label>
+                        <input type="number" id="facultyMaxCredit" value="12" min="1" max="30">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Academic Designation / Rank <span class="req">*</span></label>
+                        <select id="facultyDesignation" required>
+              <option value="Professor">Professor</option>
+              <option value="Associate Professor">Associate Professor</option>
+              <option value="Assistant Professor">Assistant Professor</option>
+              <option value="Lecturer" selected>Lecturer</option>
+              <option value="Teaching Fellow">Teaching Fellow</option>
+              <option value="Graduate Assistant">Graduate Assistant</option>
+              <option value="Teaching Assistant">Teaching Assistant</option>
+            </select>
+                    </div>
+
+                    <div class="modal-footer mt-4">
+                        <button type="button" class="btn btn-outline" onclick="closeModal('modalFacultyForm')">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="btnFacultySubmit">Save Faculty Member</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Faculty Profile & Official Contact Information Modal (Requirement 21) -->
+    <div class="modal" id="modalFacultyProfile">
+        <div class="modal-content glass-card modal-large">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-id-card"></i> Faculty Profile & Workload Information</h3>
+                <button class="modal-close" onclick="closeModal('modalFacultyProfile')">&times;</button>
+            </div>
+            <div class="modal-body" id="modalFacultyProfileBody">
+                <!-- Rendered dynamically by app.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts (app.js split into modular files - Phase 2) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => updateThemeToggleUI(getSavedTheme()));
+    </script>
+    <script src="js/auth.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/dept-combo.js"></script>
+    <script src="js/dept-tree.js"></script>
+    <script src="js/timetable.js"></script>
+    <script src="js/excel-import.js"></script>
+    <script src="js/rooms-admin.js"></script>
+    <script src="js/room-requests.js"></script>
+    <script src="js/dashboard-analytics.js"></script>
+</body>
+
+</html>

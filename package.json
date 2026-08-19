@@ -1,0 +1,29 @@
+{
+  "name": "university-timetable-system",
+  "version": "1.0.0",
+  "description": "UET KSK Centralized Multi-Department University Timetable Management System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "timetable",
+    "university",
+    "uet",
+    "express",
+    "sqlite"
+  ],
+  "author": "UET Tech Team",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "helmet": "^8.0.0",
+    "multer": "^1.4.5-lts.1",
+    "xlsx": "^0.18.5"
+  }
+}

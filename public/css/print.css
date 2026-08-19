@@ -1,0 +1,232 @@
+/* Print Utilities */
+
+.print-header {
+    display: none;
+}
+
+@media print {
+    .no-print,
+    .uet-sidebar,
+    .uet-header {
+        display: none !important;
+    }
+    .uet-content-wrapper {
+        margin-left: 0 !important;
+    }
+    .print-header {
+        display: block;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+}
+
+
+/* Print Media Stylesheet - ONLY Print Timetable Matrix (Landscape 5-Day Full Fit) */
+
+@media print {
+    @page {
+        size: landscape;
+        margin: 5mm;
+    }
+    body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-size: 8pt !important;
+    }
+    /* HIDE ALL VIEWS AND CONTENT EXCEPT viewTimetable */
+    #viewDashboard,
+    #viewDeptsTree,
+    #viewExcelImport,
+    #viewRoomsManager,
+    #viewAdminCreds,
+    #viewRoomRequests,
+    #viewSettings,
+    #viewLanding,
+    #uetSidebar,
+    .top-header,
+    .control-panel,
+    .status-bar,
+    .no-print,
+    .modal,
+    .btn,
+    .sidebar-overlay,
+    .panel-actions,
+    .slot-actions,
+    .hero-section,
+    .stat-cards-grid,
+    .dept-stats-cards-grid,
+    .charts-grid-wrapper {
+        display: none !important;
+    }
+    /* FORCE SHOW viewTimetable ONLY */
+    #viewTimetable {
+        display: block !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .main-layout,
+    .main-content,
+    .timetable-card,
+    #timetablePrintArea,
+    #gridWrapper {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        overflow: visible !important;
+    }
+    /* Print Header Title */
+    .print-header {
+        display: block !important;
+        text-align: center;
+        margin-bottom: 8px;
+        border-bottom: 2px solid #006633;
+        padding-bottom: 4px;
+    }
+    .print-header h2 {
+        font-size: 13pt !important;
+        color: #006633 !important;
+        margin: 0 0 2px 0 !important;
+        font-weight: 800 !important;
+    }
+    .print-header p {
+        font-size: 8.5pt !important;
+        color: #475569 !important;
+        margin: 0 !important;
+    }
+    /* Timetable Grid Container */
+    .weekly-grid {
+        display: grid !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        grid-template-columns: 65px repeat(5, 1fr) !important;
+        gap: 3px !important;
+        background: #cbd5e1 !important;
+        border: 1px solid #94a3b8 !important;
+    }
+    .grid-header-cell {
+        background: #006633 !important;
+        color: #ffffff !important;
+        font-size: 8pt !important;
+        font-weight: 700 !important;
+        padding: 4px 2px !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .time-slot-label {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+        font-size: 7.5pt !important;
+        font-weight: 700 !important;
+        padding: 3px 2px !important;
+        text-align: center !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-right: 1px solid #cbd5e1 !important;
+        box-sizing: border-box !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .day-column {
+        background: #ffffff !important;
+        padding: 2px !important;
+        min-height: 40px !important;
+        min-width: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+    }
+    .slot-card {
+        margin-bottom: 3px !important;
+        padding: 3px 4px !important;
+        font-size: 7pt !important;
+        border-radius: 3px !important;
+        border-left-width: 3px !important;
+        background: #f8fafc !important;
+        box-shadow: none !important;
+        border-top: 1px solid #cbd5e1 !important;
+        border-right: 1px solid #cbd5e1 !important;
+        border-bottom: 1px solid #cbd5e1 !important;
+        min-width: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        word-break: break-word !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .slot-card-header {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        margin-bottom: 2px !important;
+    }
+    .dept-pill {
+        font-size: 6pt !important;
+        padding: 1px 3px !important;
+        color: #ffffff !important;
+        border-radius: 2px !important;
+        font-weight: 700 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .sem-badge {
+        font-size: 6pt !important;
+        color: #334155 !important;
+        font-weight: 700 !important;
+    }
+    .course-title {
+        font-size: 7pt !important;
+        font-weight: 700 !important;
+        color: #0f172a !important;
+        margin-bottom: 2px !important;
+        line-height: 1.1 !important;
+        word-break: break-word !important;
+    }
+    .slot-meta {
+        font-size: 6pt !important;
+        color: #475569 !important;
+        line-height: 1.15 !important;
+        word-break: break-word !important;
+    }
+    .vacant-slot-box {
+        padding: 3px 2px !important;
+        border: 1px dashed #cbd5e1 !important;
+        background: #ffffff !important;
+        color: #94a3b8 !important;
+        font-size: 6pt !important;
+        font-style: italic !important;
+        text-align: center !important;
+        min-height: 20px !important;
+        box-sizing: border-box !important;
+    }
+    .break-card {
+        padding: 2px !important;
+        font-size: 6.5pt !important;
+        text-align: center !important;
+        border-radius: 2px !important;
+        margin-bottom: 2px !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .lunch-break {
+        background: #fef3c7 !important;
+        color: #92400e !important;
+        border: 1px dashed #f59e0b !important;
+    }
+    .jummah-break {
+        background: #dcfce7 !important;
+        color: #166534 !important;
+        border: 1px dashed #22c55e !important;
+    }
+}

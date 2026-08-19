@@ -1,0 +1,5 @@
+# Ignore all .md files anywhere in the project
+*.md
+
+# But specifically allow DEPLOYMENT.md
+!DEPLOYMENT.md
