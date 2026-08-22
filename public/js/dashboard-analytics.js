@@ -5,7 +5,7 @@
 // Consistent Visualization Color Engine (Requirements 15, 16, 17, 18)
 function getUtilizationStatus(utilPct) {
     const pct = Math.min(100, Math.max(0, Math.round(utilPct)));
-    if (pct >= 90) {
+    if (pct >= 100) {
         return {
             label: `Full Utilization (${pct}%)`,
             badgeClass: 'status-pill-red',
@@ -158,11 +158,23 @@ function renderResourceCharts() {
                     { label: 'Computers (x10)', data: compCounts.map(c => Math.round(c / 10)), backgroundColor: '#7c3aed' }
                 ]
             },
+            plugins: [ChartDataLabels],
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom' } },
-                scales: { y: { beginAtZero: true } }
+                layout: { padding: { top: 18 } },
+                plugins: {
+                    legend: { position: 'bottom' },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        offset: 2,
+                        color: '#334155',
+                        font: { weight: '700', size: 11 },
+                        formatter: (value) => value > 0 ? value : ''
+                    }
+                },
+                scales: { y: { beginAtZero: true, grace: '10%' } }
             }
         });
     }
@@ -192,10 +204,21 @@ function renderResourceCharts() {
                     pointHoverRadius: 8
                 }]
             },
+            plugins: [ChartDataLabels],
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom' } },
+                layout: { padding: { top: 20 } },
+                plugins: {
+                    legend: { position: 'bottom' },
+                    datalabels: {
+                        align: 'top',
+                        offset: 8,
+                        color: '#1e3a8a',
+                        font: { weight: '700', size: 11 },
+                        formatter: (value) => value + '%'
+                    }
+                },
                 scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
             }
         });
@@ -331,12 +354,24 @@ function renderResourceCharts() {
                     backgroundColor: ['#006633', '#16a34a', '#2563eb', '#7c3aed', '#ea580c', '#0891b2', '#dc2626']
                 }]
             },
+            plugins: [ChartDataLabels],
             options: {
                 indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: { x: { beginAtZero: true } }
+                layout: { padding: { right: 26 } },
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'right',
+                        offset: 4,
+                        color: '#334155',
+                        font: { weight: '700', size: 12 },
+                        formatter: (value) => value
+                    }
+                },
+                scales: { x: { beginAtZero: true, grace: '10%' } }
             }
         });
     }
@@ -359,10 +394,18 @@ function renderResourceCharts() {
                     backgroundColor: ['#006633', '#7c3aed', '#ea580c', '#2563eb']
                 }]
             },
+            plugins: [ChartDataLabels],
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom' } }
+                plugins: {
+                    legend: { position: 'bottom' },
+                    datalabels: {
+                        color: '#ffffff',
+                        font: { weight: '700', size: 13 },
+                        formatter: (value) => value > 0 ? value : ''
+                    }
+                }
             }
         });
     }
@@ -1235,7 +1278,7 @@ function renderFacultyWorkloadTable() {
     });
 
     const coursesListStr = Object.values(courseMap).join(', ') || '<span class="text-muted text-xs" style="font-style:italic;">No active courses assigned</span>';
-    const targetCreditHours = Number(inst.max_credit_hours) || 12;
+    const targetCreditHours = 12;
     const workloadPct = Math.min(100, Math.round((totalCreditHours / targetCreditHours) * 100));
     totalUtilSum += workloadPct;
 
@@ -1311,7 +1354,7 @@ function openFacultyProfileModal(instId) {
     }
   });
 
-  const targetHours = Number(inst.max_credit_hours) || 12;
+const targetHours = 12;
   const workloadPct = Math.min(100, Math.round((totalCreditHours / targetHours) * 100));
   const statusObj = getUtilizationStatus(workloadPct);
 

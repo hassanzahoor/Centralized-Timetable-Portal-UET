@@ -1653,6 +1653,66 @@
       "session_type": "Lecture",
       "notes": "",
       "created_at": "2026-08-18T06:31:26.575Z"
+    },
+    {
+      "id": 52,
+      "department_id": 1,
+      "course_id": 1,
+      "instructor_id": 1,
+      "room_id": 5,
+      "day_of_week": "Monday",
+      "start_time": "10:00",
+      "end_time": "11:00",
+      "section": "A",
+      "semester": 1,
+      "session_type": "Lecture",
+      "notes": "",
+      "created_at": "2026-08-22T15:36:25.554Z"
+    },
+    {
+      "id": 53,
+      "department_id": 1,
+      "course_id": 1,
+      "instructor_id": 1,
+      "room_id": 5,
+      "day_of_week": "Monday",
+      "start_time": "11:00",
+      "end_time": "12:00",
+      "section": "A",
+      "semester": 1,
+      "session_type": "Lecture",
+      "notes": "",
+      "created_at": "2026-08-22T15:36:54.523Z"
+    },
+    {
+      "id": 54,
+      "department_id": 1,
+      "course_id": 1,
+      "instructor_id": 1,
+      "room_id": 5,
+      "day_of_week": "Monday",
+      "start_time": "13:00",
+      "end_time": "14:00",
+      "section": "A",
+      "semester": 1,
+      "session_type": "Lecture",
+      "notes": "",
+      "created_at": "2026-08-22T15:37:31.738Z"
+    },
+    {
+      "id": 55,
+      "department_id": 1,
+      "course_id": 1,
+      "instructor_id": 1,
+      "room_id": 8,
+      "day_of_week": "Monday",
+      "start_time": "08:00",
+      "end_time": "11:00",
+      "section": "A",
+      "semester": 1,
+      "session_type": "Lecture",
+      "notes": "",
+      "created_at": "2026-08-22T15:38:31.686Z"
     }
   ],
   "room_requests": [],
@@ -1662,7 +1722,7 @@
     "rooms": 27,
     "courses": 6,
     "instructors": 36,
-    "timetable_entries": 51,
-    "room_requests": 0
+    "timetable_entries": 55,
+    "room_requests": 1
   }
 }
